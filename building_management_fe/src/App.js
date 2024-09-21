@@ -5,12 +5,16 @@ import Signin from './pages/Form/Signin';
 import Signup from './pages/Form/Signup';
 import ResetForm from './pages/Form/ResetForm';
 import ResetPassword from './pages/Form/ResetPassword';
+import Apartment from './component/apartment/Apartment';
 
 function App() {
   return (
     <div className="App" >
       <BrowserRouter>
         <Routes>
+
+          <Route path='' element={<Apartment/>}/>
+
           <Route path='/signin' element={<Signin/> }/>
           <Route path='/signup' element={<Signup/> }/>
           <Route path='/reset' element={<ResetForm /> }/>
