@@ -26,4 +26,5 @@ public class ResReq {
     private String password;
     private List<Product> products;
     private OurUsers ourUsers;
+
 }

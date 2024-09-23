@@ -5,6 +5,7 @@
     - Add, update, delete and apartment infomation.
     - State management for apartment: vacant, occupied, under_repair.
     - Track each apartment in detail: area, number of rooms, rental/sale price, etc.
+    - Swagger API 
 
 ## Database ##
 
