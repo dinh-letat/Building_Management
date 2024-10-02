@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import './Form.css';
 import { Form, Container, Button, Row, Col } from 'react-bootstrap';
+import { ReactNotifications, Store } from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
+// import 'animate.css/animate.min.css'; // Cần cho hiệu ứng của thông báo
 
 const Signin = () => {
   const [formData, setFormData] = useState({
@@ -17,19 +20,54 @@ const Signin = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:1999/auth/signin', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    });
-    const data = await response.json();
-    console.log(data); // Hiển thị phản hồi từ API
-  }
+    try {
+      const response = await fetch('http://localhost:1999/api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        // Nếu đăng nhập thất bại, hiển thị thông báo lỗi
+        Store.addNotification({
+          title: "Login Failed!",
+          message: data.message || "An error occurred while trying to log in.",
+          type: "danger", // màu đỏ cho lỗi
+          insert: "top",
+          container: "top-right",
+          dismiss: {
+            duration: 3000, // Tự động tắt sau 3 giây
+            onScreen: true
+          }
+        });
+      } else {
+        // Đăng nhập thành công, bạn có thể chuyển hướng hoặc thực hiện các hành động khác
+        console.log("Login successful:", data);
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      // Thông báo khi có lỗi mạng hoặc server
+      Store.addNotification({
+        title: "Error!",
+        message: "Unable to connect to the server. Please try again later.",
+        type: "danger",
+        insert: "top",
+        container: "top-right",
+        dismiss: {
+          duration: 3000,
+          onScreen: true
+        }
+      });
+    }
+  };
 
   return (
-    <div className="login">
+    <div className="signin">
+      <ReactNotifications/>
       <Container className='form-container d-flex justify-content-center align-items-center' style={{ minHeight: '100vh' }}>
         <Row className="w-100">
           <Col xs={12} sm={10} md={8} lg={6} className="mx-auto">

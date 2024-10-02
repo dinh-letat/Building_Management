@@ -1,35 +1,52 @@
-// import React from 'react'
-// import { SideBar } from '../../component/sidebar/SideBar'
-// import { Row, Col } from 'react-bootstrap'
-// import { BrowserRouter, Routes, Route } from 'react-router-dom'
-// import Employee from '../../component/user-component/Employee'
+import {React, useState} from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Row, Col } from 'react-bootstrap'
+import { SideBar } from '../../component/sidebar/SideBar'
+import { Header } from '../../component/header/Header'
+import Resident from '../../component/resident/Resident'
+import './Admin.css'
 
-// const Admin = () => {
-//   return (
-//     <div className='admin-page'>
-//       <h2>This is Admin Pages</h2>
-//       <Row className='w-100'>
-//         <Col xs lg="2" className='p-0'>
-//           <SideBar />
-//         </Col>
-//         <Col className='p-0'>
+import Signin from '../Form/Signin.jsx'
+import Vehicle from '../../component/vehicle/Vehicle.jsx'
+import Accounts from '../../component/accounts/Accounts.jsx'
+import Apartments from '../../component/apartments/Apartments.jsx'
+import HeaderToogle from '../../component/header/HeaderToogle.jsx'
+import Home from '../../component/home/Home.jsx'
 
-//           <BrowserRouter>
-//             <Routes>
-//               <Route path='/' />
-//               <Route path='/employee' element={<Employee/>}/>
-//               <Route path='/role' />
-//               <Route path='/project' />
-//               <Route path='/task' />
-//               <Route path='/blank' />
-//               <Route path='/error' />
-//               <Route path='/profile' />
-//             </Routes>
-//           </BrowserRouter>
-//         </Col>
-//       </Row>
-//     </div>
-//   )
-// }
+const Admin = () => {
+    const [sidebarVisible, setSidebarVisible] = useState(false);
 
-// export default Admin
+    const toggleSidebar = () => {
+        setSidebarVisible(!sidebarVisible);
+    };
+    return (
+        <div className='admin'>
+            <Row className='w-100 no-gutters'>
+                {/* Cột sidebar */}
+                <Col xs={12} lg={2} className='p-0 sidebar-col h-100'>
+                    <SideBar />
+                    <HeaderToogle  toggleSidebar={toggleSidebar} />
+                </Col>
+
+                {/* Cột chứa Header và nội dung */}
+                <Col xs={12} lg={10} className='p-0'>
+                    <Header />
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path='' element={<Home/>} />
+                            <Route path='/login' element={<Signin />} />
+                            <Route path='/resident' element={<Resident />} />
+                                <Route path='/resident/:id' element={<Apartments />} />
+                            <Route path='/apartment' element={<Apartments />} />
+                                <Route path='/apartment/resident' element={<Apartments />} />
+                            <Route path='/account' element={<Accounts />} />
+                            <Route path='/vehicle' element={<Vehicle />} />
+                        </Routes>
+                    </BrowserRouter>
+                </Col>
+            </Row>
+        </div>
+    )
+}
+
+export default Admin
