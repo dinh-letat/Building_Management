@@ -3,6 +3,8 @@ package com.microservice.apartment_service.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,19 +24,21 @@ public class Apartment {
     private int apartment_id;
 
     @Column(name = "apartment_name")
-    @NotBlank(message = "Tên căn hộ không được để trống")
+    @NotNull(message = "Tên căn hộ không được để trống")
     private String apartment_name;
 
     @Column(name = "area")
-    @NotBlank(message = "Diện tích không được để trống")
+    @NotNull(message = "Diện tích không được để trống")
     private double area;
 
     @Column(name = "number_of_room")
-    @NotBlank(message = "Nhập số căn hộ")
+    @NotNull(message = "Số phòng không được để trống")
+    @Positive(message = "Số phòng phải lớn hơn không")
     private int number_of_room;
 
     @Column(name = "price")
-    @NotBlank(message = "Nhập đầy đủ giá căn hộ")
+    @NotNull(message = "Giá không được trống")
+    @Positive(message = "Giá phải lớn hơn không")
     private double price;
 
     @Column(name = "status")

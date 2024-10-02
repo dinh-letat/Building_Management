@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/apartments")
-@CrossOrigin(origins = "http://localhost:3000" + "https://center-building.vercel.app/")
 @Slf4j
 public class ApartmentController {
 
@@ -53,7 +52,7 @@ public class ApartmentController {
             log.info("Create new apartment successfully!");
             return new ResponseEntity<>(newApartment, HttpStatus.CREATED);
         } catch (Exception e){
-            log.error("Create new apartment has error!");
+            log.error("Create new apartment has error!" + e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

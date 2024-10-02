@@ -28,18 +28,18 @@ public class JWTUtils {
 
     public String generateToken(UserDetails userDetails){
         return Jwts.builder()
-                .subject(userDetails.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(secretKey)
                 .compact();
     }
 
     public String generateRefreshToken(HashMap<String, Objects> claims, UserDetails userDetails){
         return Jwts.builder()
-                .subject(userDetails.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(secretKey)
                 .compact();
     }
@@ -51,11 +51,11 @@ public class JWTUtils {
     private <T> T extractClaims(String token, Function<Claims, T> claimsTFunction){
         return claimsTFunction
                 .apply(Jwts
-                        .parser()
-                        .verifyWith(secretKey)
+                        .parserBuilder()
+                        .setSigningKey(secretKey)
                         .build()
-                        .parseSignedClaims(token)
-                        .getPayload());
+                        .parseClaimsJwt(token)
+                        .getBody());
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails){

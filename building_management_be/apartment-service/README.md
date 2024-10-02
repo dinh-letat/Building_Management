@@ -21,4 +21,4 @@
 
 ##  Swagger API  ##
 
-[apartment-service-swagger-api](https://github.com/dinh-letat/Building_Management/blob/main/building_management_modal_script/apartment-service-swagger-api.png)
+![apartment-service-swagger-api](https://github.com/dinh-letat/Building_Management/blob/main/building_management_modal_script/apartment-service-swagger-api.png)
