@@ -1,4 +1,4 @@
-import {React, useState} from 'react'
+import {React} from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Row, Col } from 'react-bootstrap'
 import { SideBar } from '../../component/sidebar/SideBar'
@@ -10,22 +10,15 @@ import Signin from '../Form/Signin.jsx'
 import Vehicle from '../../component/vehicle/Vehicle.jsx'
 import Accounts from '../../component/accounts/Accounts.jsx'
 import Apartments from '../../component/apartments/Apartments.jsx'
-import HeaderToogle from '../../component/header/HeaderToogle.jsx'
 import Home from '../../component/home/Home.jsx'
 
 const Admin = () => {
-    const [sidebarVisible, setSidebarVisible] = useState(false);
-
-    const toggleSidebar = () => {
-        setSidebarVisible(!sidebarVisible);
-    };
     return (
         <div className='admin'>
             <Row className='w-100 no-gutters'>
                 {/* Cột sidebar */}
                 <Col xs={12} lg={2} className='p-0 sidebar-col h-100'>
                     <SideBar />
-                    <HeaderToogle  toggleSidebar={toggleSidebar} />
                 </Col>
 
                 {/* Cột chứa Header và nội dung */}
@@ -33,7 +26,7 @@ const Admin = () => {
                     <Header />
                     <BrowserRouter>
                         <Routes>
-                            <Route path='' element={<Home/>} />
+                            <Route path='/' element={<Home/>} />
                             <Route path='/login' element={<Signin />} />
                             <Route path='/resident' element={<Resident />} />
                                 <Route path='/resident/:id' element={<Apartments />} />

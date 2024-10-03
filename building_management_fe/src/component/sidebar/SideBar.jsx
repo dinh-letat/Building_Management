@@ -42,14 +42,14 @@ export const SideBar = () => {
                     {showSubMenu && (
                         <div style={{ paddingLeft: '20px' }}>
                             <Nav.Link
-                                className='form-control d-flex align-items-center text-dark my-1'
+                                className='form-control d-flex align-items-center text-dark my-3'
                                 href="/resident" // Chỉ dẫn đến trang cư dân
                             >
                                 <FaRegUser className='me-3' />
                                 Cư Dân
                             </Nav.Link>
                             <Nav.Link
-                                className='form-control d-flex align-items-center text-dark my-1'
+                                className='form-control d-flex align-items-center text-dark'
                                 href="/vehicle" // Chỉ dẫn đến trang phương tiện
                             >
                                 <FaBicycle className='me-3'/>

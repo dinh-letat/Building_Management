@@ -1,5 +1,6 @@
 package com.microservice.apartment_service.controller;
 
+import com.microservice.apartment_service.dto.ApartmentResponse;
 import com.microservice.apartment_service.model.Apartment;
 import com.microservice.apartment_service.service.ApartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,11 @@ public class ApartmentController {
     private ApartmentService apartmentService;
 
     @GetMapping("")
-    public ResponseEntity<List<Apartment>> getApartments(){
+    public ResponseEntity<ApartmentResponse> getApartments() {
         try {
-            List<Apartment> apartments = apartmentService.getAllApartments();
-            log.info("List all apartment successfully!");
-            return new ResponseEntity<>(apartments, HttpStatus.FOUND);
-        } catch (Exception e){
-            log.warn("Không tìm thấy dữ liệu!" + e);
+            ApartmentResponse response = apartmentService.getAllApartments();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

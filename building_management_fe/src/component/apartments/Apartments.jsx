@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal } from 'react-bootstrap';
+import AxiosInstance from '../../api/APIInstance';
 
 const Apartments = () => {
     const [show, setShow] = useState(false);
@@ -7,26 +8,44 @@ const Apartments = () => {
     const handleClose = () => setShow(false);
 
     const [apartments, setApartments] = useState([]);
+    const [total, setTotal] = useState([])
     const [newApartment, setNewApartment] = useState({
         apartment_name: "",
         area: "",
         number_of_room: "",
         price: "",
-        status: "VACANT",
+        status: "TRỐNG",
         create_at: new Date().toISOString().slice(0, 19).replace('T', ' '), // Tạo giá trị cho create_at,
         update_at: null
     });
 
-
-    const getApartments = () => {
+    // const getApartments = () => {
+    //     fetch('http://localhost:8888/api/apartments')
+    //         .then(res => {
+    //             if (!res.ok) {
+    //                 throw new Error('Network response was not ok');
+    //             }
+    //             return res.json();
+    //         })
+    //         .then(data => {
+    //             setApartments(Array.isArray(data.apartments) ? data.apartments : []); // Safeguard
+    //             setTotal(data.total);
+    //         })
+    //         .catch(err => {
+    //             console.error("Error fetching apartments:", err);
+    //             setApartments([]); // Reset to empty array on error
+    //         });
+    // };
+    const getApartments = async () => {
         try {
-            fetch('http://localhost:8909/api/apartments')
-                .then(res => res.json())
-                .then(data => setApartments(data))
-        } catch (err) {
-            console.error("Error fetching products:", err)
+          const response = await AxiosInstance.get('/api/apartments');
+          console.log(response.data)
+          return response.data;
+        } catch (error) {
+          console.error('Error fetching apartments:', error);
+          throw error;
         }
-    }
+      };
 
     useEffect(() => {
         getApartments();
@@ -60,9 +79,9 @@ const Apartments = () => {
     // handle form input change
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setNewApartment((prevApartment) => ({
-            ...prevApartment,
-            [name]: value,
+        setNewApartment(prevState => ({
+            ...prevState,
+            [name]: value
         }));
     };
 
@@ -71,6 +90,11 @@ const Apartments = () => {
         e.preventDefault();
         createResident(newApartment); // Pass the new resident data to the API
     };
+
+    // update apartment by id
+    const updateApartmentById = async (id) => {
+
+    }
 
     // delete apartment by id
     const deleteApartmentById = async (id) => {
@@ -129,7 +153,7 @@ const Apartments = () => {
                         <tr>
                             <th>STT</th>
                             <th>Tên Căn Hộ</th>
-                            <th>Diện Tích</th>
+                            <th>Diện Tích (m2)</th>
                             <th>Số Phòng</th>
                             <th>Giá</th>
                             <th>Trạng Thái</th>
@@ -139,23 +163,29 @@ const Apartments = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {apartments.map((apartment, id) => (
-                            <tr key={id}>
-                                <td>{id + 1}</td>
-                                <td>{apartment.apartment_name}</td>
-                                <td>{apartment.area}</td>
-                                <td>{apartment.number_of_room}</td>
-                                <td>{apartment.price}</td>
-                                <td>{apartment.status}</td>
-                                <td>{apartment.create_at}</td>
-                                <td>{apartment.update_at}</td>
-                                <td className='d-flex justify-content-around align-items-center'>
-                                    <Button variant="secondary">Xem</Button>
-                                    <Button variant="warning" onClick={handleClose}> Sửa</Button>
-                                    <Button variant="danger" onClick={() => deleteApartmentById(apartment.apartment_id)}>Xoá</Button>
-                                </td>
+                    {Array.isArray(apartments) && apartments.length > 0 ? (
+                            apartments.map((apartment, id) => (
+                                <tr key={apartment.apartment_id}> {/* Use apartment ID for key */}
+                                    <td>{id + 1}</td>
+                                    <td>{apartment.apartment_name}</td>
+                                    <td>{apartment.area}</td>
+                                    <td>{apartment.number_of_room}</td>
+                                    <td>{apartment.price}</td>
+                                    <td>{apartment.status}</td>
+                                    <td>{apartment.create_at}</td>
+                                    <td>{apartment.update_at}</td>
+                                    <td className='d-flex justify-content-around align-items-center'>
+                                        <Button variant="secondary">Xem</Button>
+                                        <Button variant="warning" onClick={() => updateApartmentById(apartment.apartment_id)}>Sửa</Button>
+                                        <Button variant="danger" onClick={() => deleteApartmentById(apartment.apartment_id)}>Xoá</Button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="9">Không có căn hộ nào</td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </Table>
             </div>
@@ -214,12 +244,11 @@ const Apartments = () => {
                                 value={newApartment.status}
                                 onChange={handleChange}
                             >
-                                <option value="VACANT">Trống</option>
-                                <option value="OCCUPIED">Đang sử dụng</option>
-                                <option value="UNDER_REPAIR">Đang sửa chữa</option>
+                                <option value="TRỐNG">TRỐNG</option>
+                                <option value="ĐANG_SỬ_DỤNG">ĐANG SỬ DỤNG</option>
+                                <option value="ĐANG_SỬA_CHỮA">ĐANG SỬA CHỮA</option>
                             </Form.Select>
                         </Form.Group>
-
 
                     </Form>
                 </Modal.Body>
@@ -232,6 +261,8 @@ const Apartments = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
+            
         </div>
     )
 }

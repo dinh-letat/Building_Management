@@ -1,6 +1,7 @@
 package com.microservice.apartment_service.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -55,7 +56,12 @@ public class Apartment {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd' 'HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private Timestamp update_at;
 
-    public enum Status{
-        VACANT, OCCUPIED, UNDER_REPAIR;
+    public enum Status {
+        @JsonProperty("TRỐNG")
+        VACANT,
+        @JsonProperty("ĐANG_SỬ_DỤNG")
+        IN_USE,
+        @JsonProperty("ĐANG_SỬA_CHỮA")
+        UNDER_REPAIR;
     }
 }

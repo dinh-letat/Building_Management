@@ -1,5 +1,6 @@
 package com.microservice.apartment_service.service.serviceimpl;
 
+import com.microservice.apartment_service.dto.ApartmentResponse;
 import com.microservice.apartment_service.model.Apartment;
 import com.microservice.apartment_service.repository.ApartmentRepository;
 import com.microservice.apartment_service.service.ApartmentService;
@@ -14,8 +15,10 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Autowired
     private ApartmentRepository apartmentRepository;
     @Override
-    public List<Apartment> getAllApartments() {
-        return apartmentRepository.findAll();
+    public ApartmentResponse getAllApartments() {
+        List<Apartment> apartments = apartmentRepository.findAll();
+        int total = apartments.size();
+        return new ApartmentResponse(apartments, total);
     }
 
     @Override
