@@ -1,7 +1,9 @@
 package com.microservice.resident_service.service.serviceimpl;
 
 import com.microservice.resident_service.model.Resident;
+import com.microservice.resident_service.model.Vehicle;
 import com.microservice.resident_service.repository.ResidentRepository;
+import com.microservice.resident_service.repository.VehicleRepository;
 import com.microservice.resident_service.service.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,9 @@ public class ResidentServiceImple implements ResidentService  {
     @Autowired
     private ResidentRepository residentRepository;
 
+    @Autowired
+    private VehicleRepository vehicleRepository;
+
     @Override
     public List<Resident> getAllResident() {
         return residentRepository.findAll();
@@ -27,9 +32,20 @@ public class ResidentServiceImple implements ResidentService  {
         );
     }
 
+
     @Override
-    public Resident saveResident(Resident resident) {
-        return residentRepository.save(resident);
+    public Resident addResidentWithVehicles(Resident resident, List<Vehicle> vehicles) {
+        // Assign the resident to each vehicle
+        if (vehicles != null) {
+            for (Vehicle vehicle : vehicles) {
+                vehicle.setResident(resident);  // Link vehicle to resident
+            }
+        }
+
+        resident.setVehicles(vehicles);  // Set vehicles in the resident
+        Resident savedResident = residentRepository.save(resident);  // Save the resident and cascade save vehicles
+
+        return savedResident;  // Return the saved resident
     }
 
     @Override

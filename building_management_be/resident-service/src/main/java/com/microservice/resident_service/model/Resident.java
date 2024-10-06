@@ -1,6 +1,7 @@
 package com.microservice.resident_service.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -9,10 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
 @Entity(name = "Resident")
 @Data
@@ -42,7 +43,7 @@ public class Resident {
 
     @Column(name = "birthday")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Ho_Chi_Minh")
-    private Date birthday;
+    private LocalDate birthday;
 
     @Column(name = "move_in_date")
     @CreationTimestamp
@@ -52,6 +53,9 @@ public class Resident {
     @Column(name = "move_out_date")
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd' 'HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
-    private Timestamp move_out_date;
+    private Timestamp move_out_date = null;
 
+    @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Vehicle> vehicles;
 }

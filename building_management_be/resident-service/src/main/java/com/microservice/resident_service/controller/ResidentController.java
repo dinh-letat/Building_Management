@@ -1,6 +1,8 @@
 package com.microservice.resident_service.controller;
 
+import com.microservice.resident_service.dto.ResidentRequest;
 import com.microservice.resident_service.model.Resident;
+import com.microservice.resident_service.model.Vehicle;
 import com.microservice.resident_service.service.ResidentService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -44,13 +46,29 @@ public class ResidentController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Resident> createNewResident(@Valid @RequestBody Resident resident){
+    public ResponseEntity<?> createNewResident(@Valid @RequestBody ResidentRequest residentRequest) {
         try {
-            Resident newResident = residentService.saveResident(resident);
-            log.info("Create new resident completed!");
-            return new ResponseEntity<>(newResident, HttpStatus.CREATED);
-        } catch (Exception e){
-            log.warn("Tạo mới không thành công, vui lòng thử lại!" + e);
+            Resident resident = new Resident();
+            resident.setResident_name(residentRequest.getResident_name());
+            resident.setPhone_number(residentRequest.getPhone_number());
+            resident.setEmail(residentRequest.getEmail());
+            resident.setBirthday(residentRequest.getBirthday());
+
+            List<Vehicle> vehicles = residentRequest.getVehicles();
+
+            // Check for null or empty vehicle list
+            if (vehicles != null && !vehicles.isEmpty()) {
+                resident.setVehicles(vehicles);  // Set vehicles in the resident if available
+            }
+
+            // Save resident and vehicles
+            Resident savedResident = residentService.addResidentWithVehicles(resident, vehicles);
+            log.info("Resident '{}' and Vehicles added successfully", resident.getResident_name());
+
+            // Return the created resident with HTTP 201 status
+            return new ResponseEntity<>(savedResident, HttpStatus.CREATED);
+        } catch (Exception e) {
+            log.warn("Tạo mới không thành công, vui lòng thử lại! " + e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal } from 'react-bootstrap';
+import { ReactNotifications, Store } from 'react-notifications-component';
+import Pagination from 'react-bootstrap/Pagination';
+import 'react-notifications-component/dist/theme.css';
 
 const Accounts = () => {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
-    const [residents, setResidents] = useState([]);
+    const [accounts, setAccounts] = useState([]);
     const [newResident, setNewResident] = useState({
         resident_name: "",
         email: "",
@@ -17,7 +20,7 @@ const Accounts = () => {
     });
 
     useEffect(() => {
-        getResidents();
+        getAccounts();
     }, []);
 
     // create new resident api
@@ -33,21 +36,45 @@ const Accounts = () => {
 
             const data = await response.json();
             if (response.ok) {
+                Store.addNotification({
+                    title: "Thêm thành công!",
+                    message: data.message || "An error occurred while trying to log in.",
+                    type: "success", // màu đỏ cho lỗi
+                    insert: "top",
+                    container: "top-left",
+                    dismiss: {
+                        duration: 5000, // Tự động tắt sau 3 giây
+                        onScreen: true
+                    }
+                });
                 console.log('Resident created successfully', data);
-                setResidents([...residents, data]); // Add the new resident to the list
+                setAccounts([...accounts, data]); // Add the new resident to the list
                 handleClose(); // Close the modal after successful creation
+
             } else {
                 console.error('Failed to create resident:', data.message);
+                Store.addNotification({
+                    title: "Thêm không thành công!",
+                    message: data.message || "Nhập đúng chính xác các trường",
+                    type: "warning", // màu đỏ cho lỗi
+                    insert: "top",
+                    container: "top-left",
+                    dismiss: {
+                        duration: 5000, // Tự động tắt sau 3 giây
+                        onScreen: true
+                    }
+                });
             }
+
         } catch (error) {
             console.error('Error:', error);
         }
     };
 
     // get residents api
-    const getResidents = async () => {
+    const getAccounts = async () => {
         try {
-            const response = await fetch('http://localhost:8908/api/residents', {
+            const response = await fetch('http://localhost:8905/api/auth', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -56,10 +83,10 @@ const Accounts = () => {
 
             const data = await response.json();
             if (response.ok) {
-                setResidents(data);
-                console.log('Fetched residents:', data);
+                setAccounts(data);
+                console.log('Fetched accounts:', data);
             } else {
-                console.error('Failed to fetch residents:', data.message);
+                console.error('Failed to fetch accounts:', data.message);
             }
         } catch (error) {
             console.error('Error:', error);
@@ -80,8 +107,9 @@ const Accounts = () => {
         e.preventDefault();
         createResident(newResident); // Pass the new resident data to the API
     };
-  return (
-    <div className='accounts'>
+    return (
+        <div className='accounts'>
+            <ReactNotifications />
             <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
                 <h3 className='m-0'>Danh Sách Tài Khoản</h3>
                 <Button onClick={handleShow}>Thêm mới</Button>
@@ -106,23 +134,16 @@ const Accounts = () => {
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Tên Phương Tiện</th>
-                            <th>Biển Số Xe</th>
-                            <th>Loại Xe</th>
-                            <th>Màu Sắc</th>
-                            <th>Người Sở Hữu</th>
+                            <th>Email</th>
+                            <th>Role</th>
                             <th>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {residents.map((resident, id) => (
+                        {accounts.map((account, id) => (
                             <tr key={id}>
-                                <td>{resident.resident_id}</td>
-                                <td>{resident.resident_name}</td>
-                                <td>{resident.email}</td>
-                                <td>{resident.phone_number}</td>
-                                <td>{resident.birthday}</td>
-                                <td>{resident.move_in_date}</td>
+                                <td>{account.email}</td>
+                                <td>{account.role}</td>
                                 <td className='d-flex justify-content-around align-items-center'>
                                     <Button variant="warning" onClick={handleClose}> Sửa</Button>
                                     <Button variant="danger" type="submit">Xoá</Button>
@@ -201,8 +222,27 @@ const Accounts = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
+            {/* Panigation */}
+            <Pagination>
+                <Pagination.First />
+                <Pagination.Prev />
+                <Pagination.Item>{1}</Pagination.Item>
+                <Pagination.Ellipsis />
+
+                <Pagination.Item>{10}</Pagination.Item>
+                <Pagination.Item>{11}</Pagination.Item>
+                <Pagination.Item active>{12}</Pagination.Item>
+                <Pagination.Item>{13}</Pagination.Item>
+                <Pagination.Item disabled>{14}</Pagination.Item>
+
+                <Pagination.Ellipsis />
+                <Pagination.Item>{20}</Pagination.Item>
+                <Pagination.Next />
+                <Pagination.Last />
+            </Pagination>
         </div>
-  )
+    )
 }
 
 export default Accounts

@@ -1,5 +1,6 @@
 package com.microservice.resident_service.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -33,9 +34,9 @@ public class Vehicle {
     @NotBlank(message = "Màu xe không được để trống")
     private String color;
 
-    @Column(name = "owner")
-    @NotBlank(message = "Chủ sở hữu không được để trống")
-    private String owner;
-
+    @ManyToOne
+    @JoinColumn(name = "resident_id")
+    @JsonBackReference
+    private Resident resident;
 
 }

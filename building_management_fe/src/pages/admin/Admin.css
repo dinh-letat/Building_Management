@@ -1,13 +1,8 @@
 .admin{
     background: #ebe9e9;
 }
-.col:nth-child(2) {
-    background-color: rgba(255, 0, 0, 0.605);
-    height: 100vh;
-}
 
 .admin {
-    height: 100vh;
     display: flex;
     flex-direction: column;
 }

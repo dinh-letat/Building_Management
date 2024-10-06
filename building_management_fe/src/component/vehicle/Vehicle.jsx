@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal } from 'react-bootstrap';
+import fetchURL from '../../api/AxiosInstance';
 
 const Vehicle = () => {
     const [show, setShow] = useState(false);
@@ -7,85 +8,38 @@ const Vehicle = () => {
     const handleClose = () => setShow(false);
 
     const [residents, setResidents] = useState([]);
-    const [newResident, setNewResident] = useState({
-        resident_name: "",
-        email: "",
-        phone_number: "",
-        birthday: "",
-        move_in_date: "",
-        move_out_date: ""
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [newResident, setNewVehicle] = useState({
+        vehicle_name: "",
+        license_plate: "",
+        vehicle_type: "",
+        color: "",
     });
 
     useEffect(() => {
-        getResidents();
+        // Fetch resident data from your API
+        fetchResident();
     }, []);
 
-    // create new resident api
-    const createResident = async (residentData) => {
+    const fetchResident = async () => {
         try {
-            const response = await fetch('http://localhost:8908/api/residents', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(residentData),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                console.log('Resident created successfully', data);
-                setResidents([...residents, data]); // Add the new resident to the list
-                handleClose(); // Close the modal after successful creation
-            } else {
-                console.error('Failed to create resident:', data.message);
-            }
-        } catch (error) {
-            console.error('Error:', error);
+            const response = await fetchURL('/api/residents'); // Using fetchAPI with endpoint
+            setResidents(response.data);
+            console.log(response.data);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
         }
     };
 
-    // get residents api
-    const getResidents = async () => {
-        try {
-            const response = await fetch('http://localhost:8908/api/residents', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                setResidents(data);
-                console.log('Fetched residents:', data);
-            } else {
-                console.error('Failed to fetch residents:', data.message);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
-
-    // handle form input change
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setNewResident((prevResident) => ({
-            ...prevResident,
-            [name]: value,
-        }));
-    };
-
-    // handle form submit
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        createResident(newResident); // Pass the new resident data to the API
-    };
-
-  return (
-    <div className='vehicle'>
+    return (
+        <div className='vehicle'
+            style={{ height: '92vh'}}>
             <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
                 <h3 className='m-0'>Danh Sách Phương Tiện</h3>
-                <Button onClick={handleShow}>Thêm mới</Button>
+                {/* <Button onClick={handleShow}>Thêm mới</Button> */}
             </div>
 
             <div className="table-content bg-white m-3 p-3">
@@ -102,7 +56,7 @@ const Vehicle = () => {
                     </div>
                 </div>
 
-                <Table hover striped bordered className='w-100'>
+                <Table hover striped bordered className='w-100 text-center'>
                     <thead>
                         <tr>
                             <th>STT</th>
@@ -114,26 +68,30 @@ const Vehicle = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {residents.map((resident, id) => (
-                            <tr key={id}>
-                                <td>{resident.resident_id}</td>
-                                <td>{resident.resident_name}</td>
-                                <td>{resident.email}</td>
-                                <td>{resident.phone_number}</td>
-                                <td>{resident.birthday}</td>
-                                <td>{resident.move_in_date}</td>
-                                <td className='d-flex justify-content-around align-items-center'>
-                                    <Button variant="warning" onClick={handleClose}> Sửa</Button>
-                                    <Button variant="danger" type="submit">Xoá</Button>
-                                </td>
+                        {residents.length > 0 ? (
+                            residents.map((resident, residentIndex) => (
+                                resident.vehicles.map((vehicle, vehicleIndex) => (
+                                    <tr key={vehicle.vehicle_id}>
+                                        <td>{residentIndex + 1}</td>
+                                        <td>{vehicle.vehicle_name}</td>
+                                        <td>{vehicle.license_plate}</td>
+                                        <td>{vehicle.vehicle_type}</td>
+                                        <td>{vehicle.color}</td>
+                                        <td>{resident.resident_name}</td>
+                                    </tr>
+                                ))
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="8" className="text-center">No resident data available</td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </Table>
             </div>
 
             {/* Modal to add resident */}
-            <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered show={show} onHide={handleClose}>
+            {/* <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Thêm mới phương tiện</Modal.Title>
                 </Modal.Header>
@@ -189,9 +147,9 @@ const Vehicle = () => {
                         Lưu
                     </Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal> */}
         </div>
-  )
+    )
 }
 
 export default Vehicle

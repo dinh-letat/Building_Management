@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table, Form, Modal } from 'react-bootstrap';
-import AxiosInstance from '../../api/APIInstance';
+import { Button, Table, Form, Modal, Container } from 'react-bootstrap';
+import AxiosInstance from '../../api/AxiosInstance';
+import { FaEye } from "react-icons/fa";
+import { CiEdit } from "react-icons/ci";
+import { CiTrash } from "react-icons/ci";
+
 
 const Apartments = () => {
     const [show, setShow] = useState(false);
@@ -8,7 +12,6 @@ const Apartments = () => {
     const handleClose = () => setShow(false);
 
     const [apartments, setApartments] = useState([]);
-    const [total, setTotal] = useState([])
     const [newApartment, setNewApartment] = useState({
         apartment_name: "",
         area: "",
@@ -19,36 +22,17 @@ const Apartments = () => {
         update_at: null
     });
 
-    // const getApartments = () => {
-    //     fetch('http://localhost:8888/api/apartments')
-    //         .then(res => {
-    //             if (!res.ok) {
-    //                 throw new Error('Network response was not ok');
-    //             }
-    //             return res.json();
-    //         })
-    //         .then(data => {
-    //             setApartments(Array.isArray(data.apartments) ? data.apartments : []); // Safeguard
-    //             setTotal(data.total);
-    //         })
-    //         .catch(err => {
-    //             console.error("Error fetching apartments:", err);
-    //             setApartments([]); // Reset to empty array on error
-    //         });
-    // };
-    const getApartments = async () => {
+    const fetchApartments = async () => {
         try {
-          const response = await AxiosInstance.get('/api/apartments');
-          console.log(response.data)
-          return response.data;
+            const response = await AxiosInstance.get('/api/apartments'); // Thay thế 'API_ENDPOINT' bằng URL API thực tế
+            setApartments(response.data.apartments); // Đặt danh sách căn hộ
+            console.log(response.data.apartments)
         } catch (error) {
-          console.error('Error fetching apartments:', error);
-          throw error;
+            console.error("Error fetching the apartments", error);
         }
-      };
-
+    };
     useEffect(() => {
-        getApartments();
+        fetchApartments();
     }, []);
 
     // create new resident api
@@ -67,7 +51,7 @@ const Apartments = () => {
                 console.log('Resident created successfully', data);
                 setApartments([...apartments, data]); // Add the new resident to the list
                 handleClose(); // Close the modal after successful creation
-                getApartments();
+                fetchApartments();
             } else {
                 console.error('Failed to create resident:', data.message);
             }
@@ -105,7 +89,7 @@ const Apartments = () => {
 
             if (response.ok) {
                 console.log('Apartment deleted successfully');
-                getApartments(); // Cập nhật lại danh sách căn hộ sau khi xóa
+                fetchApartments(); // Cập nhật lại danh sách căn hộ sau khi xóa
             } else {
                 const errorData = await response.json();
                 console.error('Failed to delete apartment:', errorData.message);
@@ -115,17 +99,24 @@ const Apartments = () => {
         }
     };
 
+    // const history = useHistory(); // Use history to navigate
+
+    const apartmentDetails = (id) => {
+        // history.push(`/apartment/${id}`); // Navigate to the details page with the apartment ID
+    };
+
 
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const handleItemsPerPageChange = (e) => {
         const value = e.target.value;
         setItemsPerPage(value);
         // Gọi lại API để lấy căn hộ với số lượng hiển thị tương ứng, nếu cần
-        getApartments(); // Thay đổi hàm này nếu có truyền tham số vào API
+        fetchApartments(); // Thay đổi hàm này nếu có truyền tham số vào API
     };
 
     return (
-        <div className='vehicle'>
+        <div className='apartment'
+            style={{ height: '92vh' }}>
             <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
                 <h3 className='m-0'>Danh Sách Căn Hộ</h3>
                 <Button onClick={handleShow}>Thêm mới</Button>
@@ -163,9 +154,9 @@ const Apartments = () => {
                         </tr>
                     </thead>
                     <tbody>
-                    {Array.isArray(apartments) && apartments.length > 0 ? (
+                        {apartments.length > 0 ? (
                             apartments.map((apartment, id) => (
-                                <tr key={apartment.apartment_id}> {/* Use apartment ID for key */}
+                                <tr key={id}>
                                     <td>{id + 1}</td>
                                     <td>{apartment.apartment_name}</td>
                                     <td>{apartment.area}</td>
@@ -175,15 +166,22 @@ const Apartments = () => {
                                     <td>{apartment.create_at}</td>
                                     <td>{apartment.update_at}</td>
                                     <td className='d-flex justify-content-around align-items-center'>
-                                        <Button variant="secondary">Xem</Button>
-                                        <Button variant="warning" onClick={() => updateApartmentById(apartment.apartment_id)}>Sửa</Button>
-                                        <Button variant="danger" onClick={() => deleteApartmentById(apartment.apartment_id)}>Xoá</Button>
+                                        <Button variant="secondary">
+                                            <FaEye className='pb-1' onClick={() => apartmentDetails(apartment.apartment_id)} />
+                                        </Button>
+                                        <Button variant="warning" onClick={() => updateApartmentById(apartment.apartment_id)}>
+                                            <CiEdit className='pb-1' />
+                                        </Button>
+                                        <Button variant="danger" onClick={() => deleteApartmentById(apartment.apartment_id)}>
+                                            <CiTrash className='pb-1' />
+                                        </Button>
+                                        <Button variant='primary'>Thanh Toán</Button>
                                     </td>
                                 </tr>
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="9">Không có căn hộ nào</td>
+                                <td colSpan="9">No apartments found</td>
                             </tr>
                         )}
                     </tbody>
@@ -262,7 +260,21 @@ const Apartments = () => {
                 </Modal.Footer>
             </Modal>
 
-            
+
+            {/* Panigation */}
+            {/* <>
+                <Pagination className='container'>
+                    <Pagination.First />
+                    <Pagination.Prev />
+                    <Pagination.Item>{1}</Pagination.Item>
+                    <Pagination.Ellipsis />
+                    <Pagination.Item>{20}</Pagination.Item>
+                    <Pagination.Next />
+                    <Pagination.Last />
+                </Pagination>
+                <Container className='w-25 mt-5'>
+                </Container>
+            </> */}
         </div>
     )
 }

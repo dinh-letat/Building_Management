@@ -21,7 +21,7 @@ const Signin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:1999/api/auth/signin', {
+      const response = await fetch('http://localhost:8901/api/auth/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -38,14 +38,27 @@ const Signin = () => {
           message: data.message || "An error occurred while trying to log in.",
           type: "danger", // màu đỏ cho lỗi
           insert: "top",
-          container: "top-right",
+          container: "top-left",
           dismiss: {
             duration: 3000, // Tự động tắt sau 3 giây
             onScreen: true
           }
         });
+
+        
       } else {
         // Đăng nhập thành công, bạn có thể chuyển hướng hoặc thực hiện các hành động khác
+        Store.addNotification({
+          title: "Login Failed!",
+          message: data.message || "An error occurred while trying to log in.",
+          type: "success", // màu đỏ cho lỗi
+          insert: "top",
+          container: "top-left",
+          dismiss: {
+            duration: 4000, // Tự động tắt sau 3 giây
+            onScreen: true
+          }
+        });
         console.log("Login successful:", data);
       }
     } catch (error) {
@@ -56,9 +69,9 @@ const Signin = () => {
         message: "Unable to connect to the server. Please try again later.",
         type: "danger",
         insert: "top",
-        container: "top-right",
+        container: "top-left",
         dismiss: {
-          duration: 3000,
+          duration: 5000,
           onScreen: true
         }
       });

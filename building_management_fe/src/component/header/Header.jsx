@@ -22,7 +22,7 @@ export const Header = () => {
               id="dropdown-basic"
               className="d-flex align-items-center "
             >
-              <Image width={"45px"} height={"45px"} src='https://minhducpc.vn/uploads/images/hinh-cute01.png' roundedCircle />
+              <Image width={"45px"} height={"45px"} src='https://i.pinimg.com/564x/8f/75/ee/8f75ee06aa90cbd3ffcb5da7e64047d4.jpg' roundedCircle />
               {/* <img
             src="https://minhducpc.vn/uploads/images/hinh-cute01.png"
             alt="User"

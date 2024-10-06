@@ -1,6 +1,7 @@
 package com.microservice.resident_service.service;
 
 import com.microservice.resident_service.model.Resident;
+import com.microservice.resident_service.model.Vehicle;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +13,9 @@ public interface ResidentService {
 
     Resident getResidentById(Integer resident_id);
 
-    Resident saveResident(Resident resident);
+//    Resident saveResident(Resident resident, List<Vehicle> vehicles);
+
+    Resident addResidentWithVehicles(Resident resident, List<Vehicle> vehicles);
 
     Resident updateResidentById(Integer resident_id, Resident updateResident);
 
