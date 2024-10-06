@@ -112,7 +112,7 @@ const Accounts = () => {
             <ReactNotifications />
             <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
                 <h3 className='m-0'>Danh Sách Tài Khoản</h3>
-                <Button onClick={handleShow}>Thêm mới</Button>
+                <Button onClick={handleShow}>Đăng ký tài khoản mới</Button>
             </div>
 
             <div className="table-content bg-white m-3 p-3">
@@ -157,7 +157,7 @@ const Accounts = () => {
             {/* Modal to add resident */}
             <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Thêm mới cư dân</Modal.Title>
+                    <Modal.Title>Thêm mới tài khoản</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
