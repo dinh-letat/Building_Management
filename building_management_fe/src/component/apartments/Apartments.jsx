@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal, Container } from 'react-bootstrap';
 import AxiosInstance from '../../api/AxiosInstance';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { FaEye } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
 import { CiTrash } from "react-icons/ci";
@@ -99,10 +100,37 @@ const Apartments = () => {
         }
     };
 
-    // const history = useHistory(); // Use history to navigate
-
-    const apartmentDetails = (id) => {
-        // history.push(`/apartment/${id}`); // Navigate to the details page with the apartment ID
+    // handle get api by id and response resident object data
+    const fetchApartmentBId = async (apartment_id) => {
+        try {
+            const response = await fetch(`http://localhost:8908/api/apartments/${apartment_id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            if (response.ok) {
+                // Parse the response as JSON
+                const data = await response.json();
+                console.log('Resident ID:', apartment_id);
+                console.log('Response Data:', data);
+                
+                // Handle or use the resident data (e.g., set it in state if needed)
+                handleResidentDetails(apartment_id);  // Assuming you're setting a single resident
+            } else {
+                // Handle failed fetch and display an error message
+                const errorData = await response.json();
+                console.error('Failed to fetch resident:', errorData.message);
+            }
+        } catch (error) {
+            console.error('Error fetching resident:', error);
+        }
+    };
+    const navigate = useNavigate(); // Hook điều hướng
+    const handleResidentDetails = (apartment_id) => {
+        // Navigate to the resident details page with the ID in the URL
+        navigate(`/apartment/${apartment_id}`);
     };
 
 
@@ -167,7 +195,7 @@ const Apartments = () => {
                                     <td>{apartment.update_at}</td>
                                     <td className='d-flex justify-content-around align-items-center'>
                                         <Button variant="secondary">
-                                            <FaEye className='pb-1' onClick={() => apartmentDetails(apartment.apartment_id)} />
+                                            <FaEye className='pb-1' onClick={() => handleResidentDetails(apartment.apartment_id)} />
                                         </Button>
                                         <Button variant="warning" onClick={() => updateApartmentById(apartment.apartment_id)}>
                                             <CiEdit className='pb-1' />

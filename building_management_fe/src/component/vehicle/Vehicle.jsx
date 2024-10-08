@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Form, Modal } from 'react-bootstrap';
 import fetchURL from '../../api/AxiosInstance';
+import { Link } from 'react-router-dom'
 
 const Vehicle = () => {
     const [show, setShow] = useState(false);
@@ -39,7 +40,9 @@ const Vehicle = () => {
             style={{ height: '92vh'}}>
             <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
                 <h3 className='m-0'>Danh Sách Phương Tiện</h3>
-                {/* <Button onClick={handleShow}>Thêm mới</Button> */}
+                <Link className='pe-3' to={"/resident"}>
+                    <b>Trở về</b>
+                </Link>
             </div>
 
             <div className="table-content bg-white m-3 p-3">

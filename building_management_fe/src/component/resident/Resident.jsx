@@ -40,7 +40,6 @@ const Resident = () => {
                 move_in_date: formatDate(resident.move_in_date)
             }));
             setResidents(data);
-            console.log(data);
         } catch (err) {
             setError(err.message);
         } finally {
@@ -143,14 +142,14 @@ const Resident = () => {
     };
 
     // handle delete api
-    const deleteResidentById = async (id) => {
+    const deleteResidentById = async (resident_id) => {
         try {
-            const response = await fetch(`http://localhost:8908/api/residents/${id}`, {
+            const response = await fetch(`http://localhost:8908/api/residents/${resident_id}`, {
                 method: 'DELETE',
             });
 
             if (response.ok) {
-                console.log('Resident has id:' + id + ' deleted successfully');
+                console.log('Resident has id:' + resident_id + ' deleted successfully');
                 fetchResidents(); // Cập nhật lại danh sách căn hộ sau khi xóa
             } else {
                 const errorData = await response.json();
@@ -161,9 +160,39 @@ const Resident = () => {
         }
     };
 
+    // handle get api by id and response resident object data
+    const fetchResidentBId = async (resident_id) => {
+        try {
+            const response = await fetch(`http://localhost:8908/api/residents/${resident_id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                // Parse the response as JSON
+                const data = await response.json();
+                console.log('Resident ID:', resident_id);
+                console.log('Response Data:', data);
+
+                // Handle or use the resident data (e.g., set it in state if needed)
+                handleResidentDetails(resident_id);  // Assuming you're setting a single resident
+            } else {
+                // Handle failed fetch and display an error message
+                const errorData = await response.json();
+                console.error('Failed to fetch resident:', errorData.message);
+            }
+        } catch (error) {
+            console.error('Error fetching resident:', error);
+        }
+    };
+
+
     const navigate = useNavigate(); // Hook điều hướng
-    const handleResidentDetails = (id) => {
-        navigate(`/resident/${id}`); // Chuyển hướng sang trang ResidentDetails với id cư dân
+    const handleResidentDetails = (resident_id) => {
+        // Navigate to the resident details page with the ID in the URL
+        navigate(`/resident/${resident_id}`);
     };
 
     const handleClose = () => setShow(false);
@@ -177,7 +206,6 @@ const Resident = () => {
             style={{ height: '92vh' }}>
             <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
                 <h3 className='m-0'>Danh Sách Cư Dân</h3>
-                <Button onClick={handleShowAdd}>Thêm mới</Button>
             </div>
 
             <div className="table-content bg-white m-3 p-3">
@@ -193,6 +221,7 @@ const Resident = () => {
                         mục
                     </div>
                     <div>
+                        <Button className='me-3' onClick={handleShowAdd}>Thêm mới</Button>
                         <Button variant='success' onClick={handlePrint}>In</Button>
                     </div>
                 </div>

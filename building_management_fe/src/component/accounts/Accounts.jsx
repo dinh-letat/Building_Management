@@ -108,7 +108,8 @@ const Accounts = () => {
         createResident(newResident); // Pass the new resident data to the API
     };
     return (
-        <div className='accounts'>
+        <div className='accounts'
+            style={{ height: '93vh' }}>
             <ReactNotifications />
             <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
                 <h3 className='m-0'>Danh Sách Tài Khoản</h3>

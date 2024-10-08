@@ -3,3 +3,6 @@
     background: #fff;
     min-width: 100%;
 }
+.btn-click{
+    transition: ease-in 0.5s;
+}
