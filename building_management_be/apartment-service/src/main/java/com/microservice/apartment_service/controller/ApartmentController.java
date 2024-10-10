@@ -8,11 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/apartments")
@@ -37,7 +33,7 @@ public class ApartmentController {
         try {
             Apartment apartment = apartmentService.getApartmentById(apartment_id);
             log.info("Found apartment has id " + apartment_id);
-            return new ResponseEntity<>(apartment, HttpStatus.FOUND);
+            return new ResponseEntity<>(apartment, HttpStatus.OK);
         } catch (Exception e){
             log.warn("Không tìm thấy dữ liệu!");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -61,7 +57,7 @@ public class ApartmentController {
         try {
             Apartment apartment = apartmentService.updateApartmentById(apartment_id, updateApartment);
             log.info("Update has successfully!");
-            return new ResponseEntity<>(apartment, HttpStatus.FOUND);
+            return new ResponseEntity<>(apartment, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Update has error!");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

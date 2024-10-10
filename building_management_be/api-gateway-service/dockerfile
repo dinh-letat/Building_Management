@@ -1,5 +1,5 @@
 # Start with a base image containing Java runtime
-FROM openjdk:17-jdk-alpine
+FROM eclipse-temurin:21-jdk
 
 # Add Maintainer Info
 LABEL maitainer = "dinhlt2701@gmail.com"

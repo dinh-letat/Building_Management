@@ -31,7 +31,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     public Apartment saveApartment(Apartment apartment) {
         return apartmentRepository.save(apartment);
     }
-
+    
     @Override
     public Apartment updateApartmentById(Integer apartment_id, Apartment updateApartment) {
         Apartment apartment = apartmentRepository.findById(apartment_id).orElseThrow(

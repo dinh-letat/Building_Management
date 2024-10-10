@@ -6,9 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -16,9 +14,10 @@ import java.util.Date;
 import java.util.List;
 
 @Entity(name = "Resident")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Resident {
 
     @Id
@@ -40,6 +39,10 @@ public class Resident {
     @NotBlank(message = "Email không được để trống")
     @Email(regexp = "^[a-zA-Z0-9._%+-]+@gmail\\.com$", message = "Email phải có dạng @gmail.com")
     private String email;
+
+    @Column(name = "cccd")
+    @NotBlank(message = "Nhập đủ số CCCD")
+    private String cccd;
 
     @Column(name = "birthday")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Ho_Chi_Minh")

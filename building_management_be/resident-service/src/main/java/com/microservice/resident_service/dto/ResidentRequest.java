@@ -1,16 +1,13 @@
 package com.microservice.resident_service.dto;
 
 import com.microservice.resident_service.model.Vehicle;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResidentRequest {
