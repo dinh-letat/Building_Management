@@ -1,0 +1,26 @@
+# Start with a base image containing Java runtime
+FROM eclipse-temurin:21-jdk
+
+# Add Maintainer Info
+LABEL maitainer = "dinhlt2701@gmail.com"
+
+# Đặt thư mục làm việc
+WORKDIR /app
+
+# Copy jar from local into docker image
+COPY target/jwt-0.0.1-SNAPSHOT.jar /app/jwt-0.0.1-SNAPSHOT.jar
+
+# Add a volumn pointing to /tmp
+VOLUME /tmp
+
+# Make port 8901 available to the world outside this container
+EXPOSE 8901
+
+# The application's jar file
+ARG JAR_FILE=target/*.jar
+
+# Add the application's jar to the container
+ADD ${JAR_FILE} app.jar
+
+# Run the jar file
+ENTRYPOINT ["java", "-jar", "/app/jwt-0.0.1-SNAPSHOT.jar"]

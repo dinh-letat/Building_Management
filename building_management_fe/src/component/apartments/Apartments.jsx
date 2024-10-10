@@ -101,32 +101,32 @@ const Apartments = () => {
     };
 
     // handle get api by id and response resident object data
-    const fetchApartmentBId = async (apartment_id) => {
-        try {
-            const response = await fetch(`http://localhost:8908/api/apartments/${apartment_id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+    // const fetchApartmentBId = async (apartment_id) => {
+    //     try {
+    //         const response = await fetch(`http://localhost:8908/api/apartments/${apartment_id}`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             }
+    //         });
     
-            if (response.ok) {
-                // Parse the response as JSON
-                const data = await response.json();
-                console.log('Resident ID:', apartment_id);
-                console.log('Response Data:', data);
+    //         if (response.ok) {
+    //             // Parse the response as JSON
+    //             const data = await response.json();
+    //             console.log('Resident ID:', apartment_id);
+    //             console.log('Response Data:', data);
                 
-                // Handle or use the resident data (e.g., set it in state if needed)
-                handleResidentDetails(apartment_id);  // Assuming you're setting a single resident
-            } else {
-                // Handle failed fetch and display an error message
-                const errorData = await response.json();
-                console.error('Failed to fetch resident:', errorData.message);
-            }
-        } catch (error) {
-            console.error('Error fetching resident:', error);
-        }
-    };
+    //             // Handle or use the resident data (e.g., set it in state if needed)
+    //             handleResidentDetails(apartment_id);  // Assuming you're setting a single resident
+    //         } else {
+    //             // Handle failed fetch and display an error message
+    //             const errorData = await response.json();
+    //             console.error('Failed to fetch resident:', errorData.message);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching resident:', error);
+    //     }
+    // };
     const navigate = useNavigate(); // Hook điều hướng
     const handleResidentDetails = (apartment_id) => {
         // Navigate to the resident details page with the ID in the URL
@@ -144,7 +144,7 @@ const Apartments = () => {
 
     return (
         <div className='apartment'
-            style={{ height: '92vh' }}>
+            style={{ height: '93vh' }}>
             <div className='header p-3 w-100 bg-white d-flex justify-content-between align-items-center'>
                 <h3 className='m-0'>Danh Sách Căn Hộ</h3>
                 <Button onClick={handleShow}>Thêm mới</Button>
@@ -167,7 +167,7 @@ const Apartments = () => {
                     </div>
                 </div>
 
-                <Table hover striped bordered className='w-100 text-center'>
+                <Table hover striped className='w-100 m-0 text-center'>
                     <thead>
                         <tr>
                             <th>STT</th>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table } from 'react-bootstrap'
+import { Button, Table, Container } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'; // Hook để lấy params từ URL
 import { Link } from 'react-router-dom'
 import fetchURL from '../../api/AxiosInstance';
@@ -36,37 +36,38 @@ const ResidentDetails = () => {
         </Link>
       </div>
 
-      <div className='info bg-white m-3 p-3'>
-        <div>
+      <div className='info bg-white m-3 p-5'>
+        <div className=''>
           <h4 className='text-center'>Thông tin cá nhân</h4>
-          <Table hover responsive>
-            <tbody>
-              <tr>
-                <th>Họ Tên: </th>
-                <td>{resident.resident_name}</td>
-              </tr>
-              <tr>
-                <th>Email:</th>
-                <td>{resident.email}</td>
-              </tr>
-              <tr>
-                <th>Số Điện Thoại:</th>
-                <td>{resident.phone_number}</td>
-              </tr>
-              <tr>
-                <th>
-                  Ngày Sinh:</th>
-                <td>{resident.birthday}</td>
-              </tr>
-              <tr>
-                <th>
-                  Ngày Đăng Ký Nhận Phòng:</th>
-                <td>{resident.move_in_date}</td>
-              </tr>
+          <Container className='w-50'>
+            <Table hover responsive className='w-75'>
+              <tbody>
+                <tr>
+                  <th>Họ Tên: </th>
+                  <td>{resident.resident_name}</td>
+                </tr>
+                <tr>
+                  <th>Email:</th>
+                  <td>{resident.email}</td>
+                </tr>
+                <tr>
+                  <th>Số Điện Thoại:</th>
+                  <td>{resident.phone_number}</td>
+                </tr>
+                <tr>
+                  <th>
+                    Ngày Sinh:</th>
+                  <td>{resident.birthday}</td>
+                </tr>
+                <tr>
+                  <th>
+                    Ngày Đăng Ký Nhận Phòng:</th>
+                  <td>{resident.move_in_date}</td>
+                </tr>
 
-            </tbody>
+              </tbody>
 
-            {resident.vehicles.map((vehicle) => (
+              {resident.vehicles.map((vehicle) => (
                 <tbody >
                   <tr key={vehicle.vehicle_id}></tr>
                   <tr>
@@ -87,14 +88,15 @@ const ResidentDetails = () => {
                   </tr>
                 </tbody>
               ))}
-          </Table>
-          {resident.vehicles && resident.vehicles.length > 0 ? (
-            <Table hover responsive>
-              
             </Table>
-          ) : (
-            <p>Không có phương tiện nào được đăng ký.</p>
-          )}
+            {/* {resident.vehicles && resident.vehicles.length > 0 ? (
+              <Table hover responsive>
+
+              </Table>
+            ) : (
+              <p>Không có phương tiện nào được đăng ký.</p>
+            )} */}
+          </Container>
         </div>
 
 

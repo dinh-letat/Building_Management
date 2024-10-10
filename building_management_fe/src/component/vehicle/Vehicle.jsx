@@ -59,7 +59,7 @@ const Vehicle = () => {
                     </div>
                 </div>
 
-                <Table hover striped bordered className='w-100 text-center'>
+                <Table hover striped bordered className='w-100 m-0 text-center'>
                     <thead>
                         <tr>
                             <th>STT</th>

@@ -3,6 +3,9 @@ import { Button, Table, Form, Modal, Container } from 'react-bootstrap';
 import Pagination from 'react-bootstrap/Pagination';
 import fetchURL from '../../api/AxiosInstance';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { FaEye } from "react-icons/fa";
+import { CiEdit } from "react-icons/ci";
+import { CiTrash } from "react-icons/ci";
 
 const Resident = () => {
     const [show, setShow] = useState(false);
@@ -16,6 +19,12 @@ const Resident = () => {
         phone_number: "",
         birthday: "",
         move_in_date: "",
+        vehicles: [{
+            vehicle_name: "",
+            license_plate: "",
+            vehicle_type: "",
+            color: ""
+        }]
     });
     const [currentResidentId, setCurrentResidentId] = useState(null); // To store the resident ID for editing
 
@@ -46,6 +55,7 @@ const Resident = () => {
             setLoading(false);
         }
     };
+
     // Handle form submit
     const handleSubmits = (e) => {
         e.preventDefault();
@@ -108,12 +118,6 @@ const Resident = () => {
         }));
     };
 
-    // Handle form submit
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        handleResidentSubmit(newResident); // Pass the resident data to the API
-    };
-
     // Open modal for creating new resident
     const handleShowAdd = () => {
         setIsEditing(false); // Set to false to indicate adding a new resident
@@ -123,6 +127,14 @@ const Resident = () => {
             phone_number: "",
             birthday: "",
             move_in_date: "",
+            vehicles: [
+                {
+                    vehicle_name: "",
+                    license_plate: "",
+                    vehicle_type: "",
+                    color: ""
+                }
+            ]
         });
         setShow(true);
     };
@@ -161,32 +173,32 @@ const Resident = () => {
     };
 
     // handle get api by id and response resident object data
-    const fetchResidentBId = async (resident_id) => {
-        try {
-            const response = await fetch(`http://localhost:8908/api/residents/${resident_id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+    // const fetchResidentBId = async (resident_id) => {
+    //     try {
+    //         const response = await fetch(`http://localhost:8908/api/residents/${resident_id}`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             }
+    //         });
 
-            if (response.ok) {
-                // Parse the response as JSON
-                const data = await response.json();
-                console.log('Resident ID:', resident_id);
-                console.log('Response Data:', data);
+    //         if (response.ok) {
+    //             // Parse the response as JSON
+    //             const data = await response.json();
+    //             console.log('Resident ID:', resident_id);
+    //             console.log('Response Data:', data);
 
-                // Handle or use the resident data (e.g., set it in state if needed)
-                handleResidentDetails(resident_id);  // Assuming you're setting a single resident
-            } else {
-                // Handle failed fetch and display an error message
-                const errorData = await response.json();
-                console.error('Failed to fetch resident:', errorData.message);
-            }
-        } catch (error) {
-            console.error('Error fetching resident:', error);
-        }
-    };
+    //             // Handle or use the resident data (e.g., set it in state if needed)
+    //             handleResidentDetails(resident_id);  // Assuming you're setting a single resident
+    //         } else {
+    //             // Handle failed fetch and display an error message
+    //             const errorData = await response.json();
+    //             console.error('Failed to fetch resident:', errorData.message);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching resident:', error);
+    //     }
+    // };
 
 
     const navigate = useNavigate(); // Hook điều hướng
@@ -226,7 +238,7 @@ const Resident = () => {
                     </div>
                 </div>
 
-                <Table hover striped bordered className='w-100 text-center'>
+                <Table hover striped className='w-100 m-0 text-center'>
                     <thead>
                         <tr>
                             <th>STT</th>
@@ -248,10 +260,16 @@ const Resident = () => {
                                     <td>{resident.phone_number}</td>
                                     <td>{resident.birthday}</td>
                                     <td>{resident.move_in_date}</td>
-                                    <td>
-                                        <Button variant='secondary' onClick={() => handleResidentDetails(resident.resident_id)}>Xem</Button>
-                                        <Button variant="warning" className='mx-2' onClick={() => handleShowEdit(resident)}>Sửa</Button>
-                                        <Button variant="danger" onClick={() => deleteResidentById(resident.resident_id)}>Xoá</Button>
+                                    <td className='d-flex justify-content-around align-items-center'>
+                                        <Button variant="secondary">
+                                            <FaEye className='pb' onClick={() => handleResidentDetails(resident.resident_id)} />
+                                        </Button>
+                                        <Button variant="warning" onClick={() => handleShowEdit(resident)}>
+                                            <CiEdit className='pb' />
+                                        </Button>
+                                        <Button variant="danger" onClick={() => deleteResidentById(resident.resident_id)}>
+                                            <CiTrash className='pb' />
+                                        </Button>
                                     </td>
                                 </tr>
                             ))
@@ -321,6 +339,50 @@ const Resident = () => {
                                 type="date"
                                 name='move_in_date'
                                 value={newResident.move_in_date}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Tên Phương Tiện</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name='vehicle_name'
+                                value={newResident.vehicle_name}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Biển Số</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name='license_plate'
+                                value={newResident.license_plate}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Loại Phương Tiện</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name='vehicle_type'
+                                value={newResident.vehicle_type}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Màu Sắc</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name='color'
+                                value={newResident.color}
                                 onChange={handleChange}
                                 required
                             />

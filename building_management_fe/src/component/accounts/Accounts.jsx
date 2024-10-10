@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table, Form, Modal } from 'react-bootstrap';
+import { Button, Table, Form, Modal, Container } from 'react-bootstrap';
 import { ReactNotifications, Store } from 'react-notifications-component';
 import Pagination from 'react-bootstrap/Pagination';
 import 'react-notifications-component/dist/theme.css';
@@ -26,7 +26,7 @@ const Accounts = () => {
     // create new resident api
     const createResident = async (residentData) => {
         try {
-            const response = await fetch('http://localhost:8908/api/residents', {
+            const response = await fetch('http://localhost:8908/api/auth', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -225,23 +225,25 @@ const Accounts = () => {
             </Modal>
 
             {/* Panigation */}
-            <Pagination>
-                <Pagination.First />
-                <Pagination.Prev />
-                <Pagination.Item>{1}</Pagination.Item>
-                <Pagination.Ellipsis />
+            <Container className='text-center'>
+                <Pagination>
+                    <Pagination.First />
+                    <Pagination.Prev />
+                    <Pagination.Item>{1}</Pagination.Item>
+                    <Pagination.Ellipsis />
 
-                <Pagination.Item>{10}</Pagination.Item>
-                <Pagination.Item>{11}</Pagination.Item>
-                <Pagination.Item active>{12}</Pagination.Item>
-                <Pagination.Item>{13}</Pagination.Item>
-                <Pagination.Item disabled>{14}</Pagination.Item>
+                    <Pagination.Item>{10}</Pagination.Item>
+                    <Pagination.Item>{11}</Pagination.Item>
+                    <Pagination.Item active>{12}</Pagination.Item>
+                    <Pagination.Item>{13}</Pagination.Item>
+                    <Pagination.Item disabled>{14}</Pagination.Item>
 
-                <Pagination.Ellipsis />
-                <Pagination.Item>{20}</Pagination.Item>
-                <Pagination.Next />
-                <Pagination.Last />
-            </Pagination>
+                    <Pagination.Ellipsis />
+                    <Pagination.Item>{20}</Pagination.Item>
+                    <Pagination.Next />
+                    <Pagination.Last />
+                </Pagination>
+            </Container>
         </div>
     )
 }
